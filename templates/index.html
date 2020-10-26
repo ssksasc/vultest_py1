@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>vultest</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+JP" />
+    <style>
+    table { border-collapse: collapse; }
+    table thead td { background-color: #ccc; }
+    table td { border: 1px solid #000; padding: 2px; }
+    </style>
+</head>
+<body>
+<header>
+    <h1><a href="./">脆弱性テスト</a></h1>
+    <p>脆弱性のあるアプリケーションです。</p>
+</header>
+<script>
+let xssrf = function() {
+    let frm = document.getElementById("frm");
+    frm.action = "./xssrf";
+    frm.submit();
+};
+let xssst = function() {
+    let frm = document.getElementById("frm");
+    frm.action = "./xssst";
+    frm.submit();
+};
+let sqli = function() {
+    let frm = document.getElementById("frm");
+    frm.action = "./sqli";
+    frm.submit();
+};
+let oprd = function() {
+    let frm = document.getElementById("frm");
+    frm.host.value = location.host;
+    frm.action = "./oprd";
+    frm.submit();
+};
+</script>
+<section>
+    <form id="frm" action="./" method="post">
+        <input name="value" type="text" placeholder="送信文字列" />
+        <p class="p_btn">
+            <input type="button" value="XSS (reflected)" onclick="xssrf();" />
+            <input type="button" value="XSS (stored)" onclick="xssst();" />
+            <input type="button" value="SQL injection" onclick="sqli();" />
+            <input type="button" value="Open Redirection" onclick="oprd();" />
+        </p>
+        <input name="host" type="hidden" value="">
+    </form>
+</section>
+<section>
+    {% if vt_list is not none %}
+    <table>
+        <thead>
+            <tr>
+                <td>id</td>
+                <td>category</td>
+                <td>name</td>
+                <td>number</td>
+                <td>text</td>
+                <td>idate</td>
+                <td>udate</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for vt in vt_list %}
+            <tr>
+                <td>{{vt.id       | safe}}</td>
+                <td>{{vt.category | safe}}</td>
+                <td>{{vt.name     | safe}}</td>
+                <td>{{vt.number   | safe}}</td>
+                <td>{{vt.text     | safe}}</td>
+                <td>{{vt.idate    | safe}}</td>
+                <td>{{vt.udate    | safe}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</section>
+<footer>
+    <p>This page must not be release.</p>
+</footer>
+</body>
+

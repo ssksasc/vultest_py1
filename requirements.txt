@@ -1,0 +1,6 @@
+uwsgi
+bcrypt
+Flask
+Flask-Login
+Flask-WTF
+mysql-connector-python
